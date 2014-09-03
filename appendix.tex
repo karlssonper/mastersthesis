@@ -1,0 +1,92 @@
+\section*{Appendix A: Test algorithms}
+\addcontentsline{toc}{section}{Appendix A: Test algorithms}
+
+\begin{algorithm}
+\caption{Linear interpolation}
+\begin{algorithmic}
+\FOR{all pixels $p$}
+\STATE out[p.idx] = $(1-\alpha)$ inA[p.idx] + $\alpha$ inB[p.idx]
+\ENDFOR
+\end{algorithmic}
+\label{lerp}
+\end{algorithm}
+
+\begin{algorithm}
+\caption{Box blur}
+\begin{algorithmic}
+\FOR{all pixels $p$}
+\STATE value = 0
+\STATE sum = 0
+\FOR{neighboring pixels $p_i$}
+\STATE value += $p_i$
+\STATE sum += 1
+\ENDFOR
+\STATE out[p.idx] = value / sum;
+\ENDFOR
+\end{algorithmic}
+\label{boxblur}
+\end{algorithm}
+
+\begin{algorithm}
+\caption{Gaussian blur}
+\begin{algorithmic}
+\FOR{all pixels $p$}
+\STATE value = 0
+\STATE totalWeight = 0
+\FOR{neighboring pixels $p_i$}
+\STATE weight = $exp(-\frac{{(p.x-p_i.x)}^2 + {(p.y-p_i.y)}^2}{\Delta^2})$
+\STATE value += weight * $p_i$
+\STATE totalWeight += weight
+\ENDFOR
+\STATE out[p.idx] = value / totalWeight;
+\ENDFOR
+\end{algorithmic}
+\label{gaussianblur}
+\end{algorithm}
+
+\begin{algorithm}
+\caption{Separable blur}
+\begin{algorithmic}
+\FOR{all pixels $p$}
+\STATE value = 0
+\STATE totalWeight = 0
+\FOR{neighboring horizontal pixels $p_i$}
+\STATE weight = $exp(-\frac{{(p.x-p_i.x)}^2}{\Delta^2})$
+\STATE value += weight * $p_i$
+\STATE totalWeight += weight
+\ENDFOR
+\STATE tmp[p.idx] = value / totalWeight;
+\ENDFOR
+\FOR{all pixels $p$ in $tmp$}
+\STATE value = 0
+\STATE totalWeight = 0
+\FOR{neighboring vertical pixels $p_i$}
+\STATE weight = $exp(-\frac{{(p.y-p_i.y)}^2}{\Delta^2})$
+\STATE value += weight * $p_i$
+\STATE totalWeight += weight
+\ENDFOR
+\STATE out[p.idx] = value / totalWeight;
+\ENDFOR
+\end{algorithmic}
+\label{gaussianblur}
+\end{algorithm}
+
+\newpage
+\section*{Appendix B: Output of verbose command-line}
+\addcontentsline{toc}{section}{Appendix B: Output of verbose command-line}
+
+\renewcommand{\lstlistingname}{Code}
+\begin{lstlisting}[caption= Example command-line application with verbose option enabled, label=verb]
+\$> gpuip -f gaussblur_opencl.ip --nogui --verbose
+Created elements from settings. 68.32 ms
+Building kernels [['gaussian_blur']]. 0.80 ms
+Importing data from /home/per/dev/gpuip/examples/images/bridge.exr to buffer1 
+Importing data done. 18.22 ms
+Allocating done. 2.65 ms
+Transfering data to GPU done. 2.37 ms
+Processing done. 1.44 ms
+Exporting data from buffer2 to /home/per/dev/gpuip/examples/output_images/gaussblur_opencl.exr 
+Exporting data done. 20.18 ms
+
+All steps done. Total runtime: 114.25 ms
+\end{lstlisting}

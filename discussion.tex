@@ -1,6 +1,8 @@
 \section{Discussion}
 \subsection{Comparision between the GPU environments}
 
+All GPU environments have both their pros and cons. After working on the implementation of each GPU environment, these are the my summarized conclusions:
+
 \begin{itemize}
 \item OpenCL
 \begin{description}
@@ -12,23 +14,25 @@
 \item CUDA
 \begin{description}
   \item[$+$] Easy to use with runtime API.
-  \item[$+$] Detailed tweaking options available if wanted.
+  \item[$+$] Debugging tools.
   \item[$+$] Supports templating and operator overloading.
-  \item[$-$] Does not runtime compilation.
+  \item[$-$] Does not support runtime compilation.
   \item[$-$] Only works on NVIDIA GPUs.
   \item[$-$] Poor 16-bit floating point support.
 \end{description}
 \item GLSL
 \begin{description}
+  \item[$+$] Works on any GPU. OpenGL is include in a lot of systems by default.
   \item[$+$] Supports runtime compilation.
-  \item[$+$] Works on any GPU.
-  \item[$+$] Abstract way of dealing with data (good 16-bit float support).
+  \item[$+$] Abstract way of dealing with data.
   \item[$+$] Display functionality for free.
-  \item[$-$] Setup is not clean. Have to fake render a quad.
+  \item[$-$] Setup is not clean. Need to fake render a quad.
   \item[$-$] Can only write to one pixel at a time.
   \item[$-$] No local shared memory between work items.
 \end{description}
 \end{itemize}
+
+If I had to pick only one GOY environment to use in a new application, I would probably choose OpenCL. Mainly because it is very flexible and runs both on CPU and the GPU. GLSL would be an okay choice as long as the application is about image processing. GLSL should work out of the box on most systems and that makes it very easy to deploy the application. However, for more general purpose computing, GLSL quickly becomes bulky and requires a lot of tricks. Writing OpenCL and CUDA kernels is about the same and the setup in CUDA is actually easier than OpenCL. The limitation of NVIDIA-only GPUs is too big of a factor to me and if NVIDIA would make CUDA run on all GPUs, I think it would increase a lot in popularity. All the tests in this thesis were very basic and there might be a possibility where CUDA is the best environment to use once you want to optimize further and really get the the most out of the GPU.
 
 \subsection{OpenGL interoperability}
 
@@ -55,14 +59,4 @@ It is only possible to write data per pixel in gpuip. If an algorithm would requ
 
 \subsection{Work item distribution}
 
-Some algorithms might be optimized further by allowing a work item/thread write to more than one pixel. For example, in separable blur algorithms, it might be worth splitting the algorithm in two steps and have each work item operate on a row/column alone. Memory lookups tend to be the expensive part of an algorithm and if a work item can work alone on a row, data could be stored in the local registers as the work item iterates over the pixels. The public API of gpuip could be changed to something like this.
-\newline
-\renewcommand{\lstlistingname}{Code}
-\begin{lstlisting}[caption= gpuip kernel work item distribution, label=dist]
-struct Kernel{
-  // ... rest of Kernel declarations 
-  enum WorkDistribution { PIXEL, ROW, COLUMN };
-  WorkDistribution distribution;
-};
-\end{lstlisting}
-A different work item distribution is not possible in GLSL where every kernel has to be executed on a per pixel level.
+Some algorithms might be optimized further by allowing a work item/thread write to more than one pixel. For example, in separable blur algorithms, it might be worth splitting the algorithm in two steps and have each work item operate on a row/column alone. Memory lookups tend to be the expensive part of an algorithm and if a work item can work alone on a row, data could be stored in the local registers as the work item iterates over the pixels. A different work item distribution is not possible in GLSL where every kernel has to be executed on a per pixel level.
