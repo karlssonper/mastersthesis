@@ -1,6 +1,34 @@
 \section{Discussion}
 \subsection{Comparision between the GPU environments}
 
+\begin{itemize}
+\item OpenCL
+\begin{description}
+  \item[$+$] Supports runtime compilation.
+  \item[$+$] Works on any GPU and any CPU.
+  \item[$-$] Poor 16-bit floating point support.
+  \item[$-$] Does not support templating.
+\end{description}
+\item CUDA
+\begin{description}
+  \item[$+$] Easy to use with runtime API.
+  \item[$+$] Detailed tweaking options available if wanted.
+  \item[$+$] Supports templating and operator overloading.
+  \item[$-$] Does not runtime compilation.
+  \item[$-$] Only works on NVIDIA GPUs.
+  \item[$-$] Poor 16-bit floating point support.
+\end{description}
+\item GLSL
+\begin{description}
+  \item[$+$] Supports runtime compilation.
+  \item[$+$] Works on any GPU.
+  \item[$+$] Abstract way of dealing with data (good 16-bit float support).
+  \item[$+$] Display functionality for free.
+  \item[$-$] Setup is not clean. Have to fake render a quad.
+  \item[$-$] Can only write to one pixel at a time.
+  \item[$-$] No local shared memory between work items.
+\end{description}
+\end{itemize}
 
 \subsection{OpenGL interoperability}
 
