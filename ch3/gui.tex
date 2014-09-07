@@ -1,9 +1,9 @@
 \subsection{Graphical user interface}
 
-The graphical user interface application is written in python since it often means faster development iterations. To fit the cross-platform requirements, the ui framework Qt[ref] is used. The core of Qt is written in C++ but there are python bindings available. Gpuip uses pyside[ref] since they are well documented and supported on the offical Qt homepage. 
+The graphical user interface application is written in python since it often means faster development iterations. To fit the cross-platform requirements, the UI framework Qt[ref] is used. The core of Qt is written in C++ but there are python bindings available. Gpuip uses pyside[ref] since they are well documented and supported on the official Qt homepage. 
 \newline
 
-The application will be a {\tt QMainWindow}. Main windows in Qt support menus and toolbars. All the different components will be dock widgets. A dock widget is resizeable and can be deattached to a solo window. The following compontents will be added as dock widgets.
+The application will be a {\tt QMainWindow}. Main windows in Qt support menus and toolbars. All the different components will be dock widgets. A dock widget is resizeable and can be detached to a solo window. The following components will be added as dock widgets:
 
 \begin{enumerate}
 \item Toolbar. Add menu items and toolbar items as {\tt QAction}. It is possible to bind an action to a hotkey.

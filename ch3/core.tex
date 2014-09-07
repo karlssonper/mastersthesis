@@ -1,6 +1,6 @@
 \subsection {Designing the core library}
 
-On an abstract level, the workflows in the GPU environemnts are more or less the same. This motivates the use of a library where a developer can target a common abstract interface and not have to worry about specific GPU environment implementations. The library is named \emph{gpuip} which stands for \emph {GPU Image Processing}. The core superclass in \emph{gpuip} is called {\tt ImageProcessor} and it is through this class that all the GPU communication is going to happen. An implementation of an {\tt ImageProcessor} needs to support the following common steps:
+On an abstract level, the workflows in the differnet GPU environments are more or less the same. This motivates the use of a library where a developer can target a common abstract interface and not have to worry about specific GPU environment implementations. The library created in this thesis is named \emph{gpuip} and stands for \emph {GPU Image Processing}. The core superclass in \emph{gpuip} is called {\tt ImageProcessor} and it is through this class that all the GPU communication is going to happen. An implementation of an {\tt ImageProcessor} needs to support the following common steps:
 
 \begin{enumerate}
 \item Compile kernel text code and build into GPU machine code.
@@ -9,7 +9,7 @@ On an abstract level, the workflows in the GPU environemnts are more or less the
 \item Run kernels on the GPU.
 \end{enumerate}
 
-These steps are all virtual functions in the {\tt ImageProcessor} class that needs to be implemented in the subclasses. The class {\tt Buffer} provides memory allocation information to {\tt ImageProcessor}. An algorithm can have an arbitrary amount of buffers. The input and outputs are stored in buffers. Each buffer has a unique name and information about data type and how many channels there are per pixel. The supported data formats are {\tt unsigned byte, half} and {\tt float}. {\tt half} is a 16-bit floating point scalar in comparison to the standard 32-bit {\tt float}. Each buffer can have between one to four channels per pixel. Two or three channels per pixels is supported but not recommended as it leads to uncoalesced reads and writes[ref]. 
+These steps are all virtual functions in the {\tt ImageProcessor} class that needs to be implemented in the subclasses. The class {\tt Buffer} provides memory allocation information to the {\tt ImageProcessor} class. An algorithm can have an arbitrary amount of buffers. The input and outputs are stored in buffers. Each buffer has a unique name, information about data type and how many channels there are per pixel. The supported data formats are {\tt unsigned byte, half} and {\tt float}. {\tt half} is a 16-bit floating point scalar (compared to the standard 32-bit {\tt float}). Each buffer can have between one to four channels per pixel. Two or three channels per pixels is supported but not recommended as it leads to uncoalesced reads and writes[ref]. 
 \newline
 \renewcommand{\lstlistingname}{Code}
 \begin{lstlisting}[caption= Buffer struct, label=bufferapi]
@@ -22,7 +22,7 @@ struct Buffer{
 };
 \end{lstlisting}
 \newpage
-The {\tt Kernel} class provides the following:
+The {\tt Kernel} struct provides the following:
 \begin{enumerate}
 \item GPU kernel code. Syntax and program structure depends on GPU environment.
 \item Which buffers are going to be used as input? What are they called in the kernels?
@@ -60,9 +60,9 @@ class ImageProcessor {
     Kernel::Ptr CreateKernel(const string & name);
 };
 \end{lstlisting}
-In this case, the factory method pattern guarantees that the {\tt ImageProcessor} is the \emph{owner} of the buffers and kernel objects since it is going to store a copy of the shared pointer internally. As long as the {\tt ImageProcessor} exists, the {\tt Buffer} and {\tt Kernel} objects are also guaranteed to exist. This makes it impossible to reach cases where the {\tt ImageProcessor} is using pointers that are pointing to deleted objects and is considered a safe approach. Anyone using the library can still create and delete {\tt Buffer} and {\tt Kernel} objects on their own, but they will never be able to register these objects themselves.
+In this case, the factory method pattern guarantees that the {\tt ImageProcessor} is the \emph{owner} of the buffers and kernel objects since it is going to store a copy of the shared pointer internally. As long as the {\tt ImageProcessor} exists, the {\tt Buffer} and {\tt Kernel} objects are also guaranteed to exist. This makes it impossible to reach cases where the {\tt ImageProcessor} is using pointers that are pointing to deleted objects. Anyone using the library can still create and delete {\tt Buffer} and {\tt Kernel} objects on their own, but they will never be able to register these objects themselves.
 
-To make things simple, all GPU operations are synchronous which means that once a function that communicates with the GPU has been been called, it is not going to return until the GPU is done proceeding the task. There are asynchronous ways of calling the GPU in all environment but they require syncing stages. As discussed in [ref], it might be worth supporting asynchronous calls in the future since they could potentially give better performance.
+To make things simple, all GPU operations are synchronous which means that once a function that communicates with the GPU has been called, it is not going to return until the GPU is done proceeding the task. There are asynchronous ways of calling the GPU in all environment but they require syncing stages. As discussed in [ref], it might be worth supporting asynchronous calls in the future since they could potentially give better performance.
 \newline
 \renewcommand{\lstlistingname}{Code}
 \begin{lstlisting}[caption= {\tt ImageProcessor} API for GPU operations, label=ipapi]
