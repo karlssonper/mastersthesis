@@ -9,7 +9,7 @@ On an abstract level, the workflows in the differnet GPU environments are more o
 \item Run kernels on the GPU.
 \end{enumerate}
 
-These steps are all virtual functions in the {\tt ImageProcessor} class that needs to be implemented in the subclasses. The class {\tt Buffer} provides memory allocation information to the {\tt ImageProcessor} class. An algorithm can have an arbitrary amount of buffers. The input and outputs are stored in buffers. Each buffer has a unique name, information about data type and how many channels there are per pixel. The supported data formats are {\tt unsigned byte, half} and {\tt float}. {\tt half} is a 16-bit floating point scalar (compared to the standard 32-bit {\tt float}). Each buffer can have between one to four channels per pixel. Two or three channels per pixels is supported but not recommended as it leads to uncoalesced reads and writes[ref]. 
+These steps are all virtual functions in the {\tt ImageProcessor} class that needs to be implemented in the subclasses. The class {\tt Buffer} provides memory allocation information to the {\tt ImageProcessor} class. An algorithm can have an arbitrary amount of buffers. The input and outputs are stored in buffers. Each buffer has a unique name, information about data type and how many channels there are per pixel. The supported data formats are {\tt unsigned byte, half} and {\tt float}. {\tt half} is a 16-bit floating point scalar (compared to the standard 32-bit {\tt float}). Each buffer can have between one to four channels per pixel. Two or three channels per pixels is supported but not recommended as it leads to uncoalesced reads and writes\cite{cudaoptimize}. 
 \newline
 \renewcommand{\lstlistingname}{Code}
 \begin{lstlisting}[caption= Buffer struct, label=bufferapi]
@@ -46,7 +46,7 @@ struct Kernel {
 };
 \end{lstlisting}
 
-As can been seen in Code \ref{bufferapi} and Code \ref{kernelapi}, both structs have a {\tt Ptr} typedef. A {\tt Buffer::Ptr} is a shared pointer[ref] to a {\tt Buffer} object. To register a {\tt Buffer} or a {\tt Kernel} to an {\tt ImageProcessor} object, the factory method pattern[ref] is used. An example of this can be seen in Code \ref{factoryfunc}.
+As can been seen in Code \ref{bufferapi} and Code \ref{kernelapi}, both structs have a {\tt Ptr} typedef. A {\tt Buffer::Ptr} is a shared pointer\cite{smartpointer} to a {\tt Buffer} object. To register a {\tt Buffer} or a {\tt Kernel} to an {\tt ImageProcessor} object, the factory method pattern\cite{designpatterns} is used. An example of this can be seen in Code \ref{factoryfunc}.
 \newline
 \renewcommand{\lstlistingname}{Code}
 \begin{lstlisting}[caption= Factory functions to create Buffer and Kernel objects, label=factoryfunc]
@@ -62,7 +62,7 @@ class ImageProcessor {
 \end{lstlisting}
 In this case, the factory method pattern guarantees that the {\tt ImageProcessor} is the \emph{owner} of the buffers and kernel objects since it is going to store a copy of the shared pointer internally. As long as the {\tt ImageProcessor} exists, the {\tt Buffer} and {\tt Kernel} objects are also guaranteed to exist. This makes it impossible to reach cases where the {\tt ImageProcessor} is using pointers that are pointing to deleted objects. Anyone using the library can still create and delete {\tt Buffer} and {\tt Kernel} objects on their own, but they will never be able to register these objects themselves.
 
-To make things simple, all GPU operations are synchronous which means that once a function that communicates with the GPU has been called, it is not going to return until the GPU is done proceeding the task. There are asynchronous ways of calling the GPU in all environment but they require syncing stages. As discussed in [ref], it might be worth supporting asynchronous calls in the future since they could potentially give better performance.
+To make things simple, all GPU operations are synchronous which means that once a function that communicates with the GPU has been called, it is not going to return until the GPU is done proceeding the task. There are asynchronous ways of calling the GPU in all environment but they require syncing stages. As discussed in \cite{cudaoptimize}, it might be worth supporting asynchronous calls in the future since they could potentially give better performance.
 \newline
 \renewcommand{\lstlistingname}{Code}
 \begin{lstlisting}[caption= {\tt ImageProcessor} API for GPU operations, label=ipapi]
