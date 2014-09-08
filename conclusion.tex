@@ -6,8 +6,8 @@ The GPU environments available today are implemented differently but the main id
 \item Allocate GPU memory and transfer from/to CPU
 \item Run GPU program
 \end{enumerate}
-To create a GPU framework for image processing, the public interface has to support these steps. Memory allocation and transferring is simplified if inputs and outputs to the algorithms are restricted to images only. Supporting other kinds of inputs and outputs is possible but makes it harder to generalize. Some functionality only exists in some GPU environments and it is up to the framework to decide if features that do not exists in all environments should be added or not. All three environments tested in this thesis had their pros and cons and which one to choose is case-dependent.
+To create a GPU framework for image processing, the public interface has to support these steps. Memory allocation and transferring is simplified if inputs and outputs to the algorithms are restricted to images. Supporting other kinds of inputs and outputs is possible but makes it harder to generalize. Some functionality only exists in some GPU environments and it is up to the framework to decide if features that do not exists in all environments should be added or not. All three environments tested in this thesis had their pros and cons and which one to choose is case-dependent.
 \newline
 
-Using a GPU framework is worth it if an image processing algorithm requires per pixel computations and performance is important. The more computation required, the faster the GPU is compared to the CPU. The CPU only performs well in cases where there is little computation and the memory fetch pattern is linear.
+Using a GPU framework is beneficial if an image processing algorithm requires a lot of per pixel computation and performance is important. The more computation required, the faster the GPU is compared to the CPU. The CPU only performs well in cases where there is little computation and the memory fetch pattern is linear.
 

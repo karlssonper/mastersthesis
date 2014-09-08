@@ -1,5 +1,15 @@
 \begin{abstract}
 \noindent
-To be added
+This thesis tries to answer how to design a framework for image processing on the GPU, supporting the common environments OpenGL GLSL, OpenCL and CUDA. An generalized view of GPU image processing is presented. The framework is called gpuip and is implemented in C++ but also wrapped with Python-bindings. The framework is cross-platform and works for Windows, Mac OSX and Unix operating systems.
+\newline
+
+\noindent
+The thesis also involves the work of creating two executable programs that uses the gpuip-framework. One of the programs has a graphical user interface and the other program is command-line only. Both programs are developed in Python.
+\newline
+
+\noindent
+Performance tests are created to compare the GPU environments against a single core CPU implementation. All the GPU implementations in the gpuip-framework are significantly faster than the CPU when executing the presented test-cases. On average, the framework is two magnitudes faster than the single core CPU.
+
+
 
 \end{abstract}
