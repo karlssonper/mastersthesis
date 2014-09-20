@@ -51,7 +51,7 @@ I think this option would make the library more lucrative to use in applications
 
 \subsection{Template kernels}
 
-Consider a case where you only want to write one kernel file but support multiple fileformats. For GLSL, this is already true and quite practical. However, it is not possible in OpenCL and CUDA. CUDA supports templated functions. CYDA only supports {\tt half} storage and not computation and it is therefore not possible to template a function and have it work the same with {\tt half}, {\tt unsigned byte} and {\tt float}. In OpenCL, half computation is supported if the graphics drivers come with the {\tt cl\_khr\_fp16} extension. OpenCL does not support templates but since we parse the kernel code ourselves in gpuip, we could implement our own templating rules and generate one OpenCL kernel for every data type that gpuip supports. 
+Consider a case where you only want to write one kernel file but support multiple fileformats. For GLSL, this is already true and quite practical. However, it is not possible in OpenCL and CUDA. CUDA supports templated functions. CUDA only supports {\tt half} storage and not computation and it is therefore not possible to template a function and have it work the same with {\tt half}, {\tt unsigned byte} and {\tt float}. In OpenCL, half computation is supported if the graphics drivers come with the {\tt cl\_khr\_fp16} extension. OpenCL does not support templates but since we parse the kernel code ourselves in gpuip, we could implement our own templating rules and generate one OpenCL kernel for every data type that gpuip supports. 
 
 \subsection{Computations as input}
 

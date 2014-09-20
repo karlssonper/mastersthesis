@@ -13,7 +13,7 @@ The input textures (buffers) and parameters has to be set before the GPU kernel 
 OpenCL needs a context for saving states and an event queue to register GPU operations in. Allocating memory is done through OpenCL buffers and kernel code is compiled at runtime with the standard OpenCL API calls {\tt clCreateProgramWithSource}, {\tt clBuildProgram} and {\tt clCreateKernel}.
 \newline
 
-When executing the kernel code, the kernel arguments have to be passed in the same order as they are presented in the kernel function. Kernel arguments include pointers to input and output buffers, user-defined parameters and gpuip parameters. Since the C++ code is bound to compile time and the kernel code is written at runetime,  there have to be rules that decides which order arguments appeaer in. The current ordering rules are:
+When executing the kernel code, the kernel arguments have to be passed in the same order as they are presented in the kernel function. Kernel arguments include pointers to input and output buffers, user-defined parameters and gpuip parameters. Since the C++ code is bound to compile time and the kernel code is written at runetime,  there have to be rules that decides which order arguments appear in. The current ordering rules are:
 
 \begin{enumerate}
 \item {\tt const} pointers to input buffers
